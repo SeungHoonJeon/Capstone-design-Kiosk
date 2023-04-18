@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import sqlite3
+import sqlite3, os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -79,9 +80,20 @@ def api_login():
         return render_template("./login.html")
 
 def delete_menu(idx):
+    sql = f"select * from table1 where id={idx}"
+    cursor.execute(sql)
+    rows = cursor.fetchone()
+    print(rows)
+    os.remove(rows[5])
     sql = f"delete from table1 where id={idx}"
     cursor.execute(sql)
     return cursor.rowcount
+
+@app.route("/kiosk", methods=['GET','POST'])
+def kiosk():
+    rows = menu() #음식 조회
+    print(rows)
+    return render_template("./kiosk_client.html", rows=rows)
 
 #처음 페이지
 @app.route("/", methods=['GET','POST'])
@@ -106,23 +118,24 @@ def hello(username=None, rows=None):
                 print(rows1)
                 return render_template("./counter_main.html", username=username, rows = rows, rows1=rows1, total_price=total_price)
         if request.method == "POST":
+            now = datetime.now()
             action = request.form['action']
             food_name = request.form['food_name']
             food_img = request.files['food_img']
-            food_img.save(f"/tmp/{food_img.filename}")
+            food_img.save(f"./static/food/{food_img.filename}")
             price = request.form['price']
             category = request.form['category']
             if action == "modifiy":
-                pass
-                #cursor.execute(f"update table1 set menu={}, price={}, category={}, img_path={}, real_img_path={}, date={} where food_name={} where id={}")
-                #return "<script>location.href='./manage';</script>"
+                id = request.form['id']
+                cursor.execute(f"update table1 set menu='{food_name}', price='{price}', category='{category}', img_path='{food_img}', real_img_path='./static/food/{food_img}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
+                return "<script>location.href='./manage';</script>"
             elif action == "add":
                 print(action) 
                 print(food_name)
                 print(food_img)
                 print(price)
                 print(category)
-                cursor.execute(f"insert into table1(menu, price, category, img_path, real_img_path, date) values('{food_name}',{price},'{category}','{food_img.filename}','/tmp/upload/{food_img.filename}','23-04-04')")
+                cursor.execute(f"insert into table1(menu, price, category, img_path, real_img_path, date) values('{food_name}',{price},'{category}','{food_img.filename}','./static/food/{food_img.filename}','{now.strftime('%Y-%m-%d %H:%M:%S')}')")
                 return "<script>alert('메뉴 추가완료');location.href='./';</script>"
     else:
         return "<script>alert('로그인 후 이용해주세요.');location.href='./login'</script>"

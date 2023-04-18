@@ -49,7 +49,7 @@
                                         <br> {{ rows[i][2] }}
                                       {% endif %}
                                       <!-- Modal -->
-                                    <div class="modal fade" id="staticBackdrop{{ i }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabe{l}" aria-hidden="true">
+                                    <div class="modal fade" id="staticBackdrop{{ i }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                           <div class="modal-content">
                                             <div class="modal-header">
@@ -163,9 +163,9 @@
                                         <label for="exampleInputPassword1" class="form-label">가격</label>
                                         <input type="price" name="price" class="form-control" id="exampleInputPassword1">
                                         <select name="category">
-                                          <option value="">양식</option>
-                                          <option value="">중식</option>
-                                          <option value="">일식</option>
+                                          <option value="양식">양식</option>
+                                          <option value="중식">중식</option>
+                                          <option value="한식">한식</option>
                                         </select>
                                       </div>  
                                       <button type="submit" class="btn btn-primary">메뉴 추가</button>

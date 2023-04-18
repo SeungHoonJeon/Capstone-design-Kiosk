@@ -16,48 +16,35 @@
   <main>
     <div class="menu-items">
     <!-- 양식 -->
+    {% for i in range(rows | length) %}
+      {% if rows[i][3] == '양식' %}
       <div class="menu-item western">
-        <img src="img/spaghetti.jpg">
-        <p class="menu-item-name">스파게티</p>
-        <p class="menu-item-price">10,000원</p>
-        <button class="menu-item-btn" onclick="addToCart('스파게티', 10000)">선택</button>
+        <img src="{{ rows[i][5] }}" width="300">
+        <p class="menu-item-name">{{ rows[i][1] }}</p>
+        <p class="menu-item-price">{{ rows[i][2] }}</p>
+        <button class="menu-item-btn" onclick="addToCart('{{ rows[i][1]|safe }}', '{{ rows[i][2]|safe }}')">선택</button>
       </div>
-      <div class="menu-item western">
-        <img src="img/pizza.jpg">
-        <p class="menu-item-name">피자</p>
-        <p class="menu-item-price">15,000원</p>
-        <button class="menu-item-btn" onclick="addToCart('피자', 15000)">선택</button>
-      </div>
-
+      
       <!-- 중식 -->
+      {% elif rows[i][3] == '중식' %}
       <div class="menu-item chinese">
-        <img src="img/jjajangmyeon.jpg">
-        <p class="menu-item-name">짜장면</p>
-        <p class="menu-item-price">8,000원</p>
-        <button class="menu-item-btn" onclick="addToCart('짜장면', 8000)">선택</button>
-      </div>
-      <div class="menu-item chinese">
-        <img src="img/jjamppong.jpg">
-        <p class="menu-item-name">짬뽕</p>
-        <p class="menu-item-price">12,000원</p>
-        <button class="menu-item-btn" onclick="addToCart('짬뽕', 12000)">선택</button>
+        <img src="{{ rows[i][5] }}" width="300">
+        <p class="menu-item-name">{{ rows[i][1] }}</p>
+        <p class="menu-item-price">{{ rows[i][2] }}</p>
+        <button class="menu-item-btn" onclick="addToCart('{{ rows[i][1]|safe }}', '{{ rows[i][2]|safe }}')">선택</button>
       </div>
 
     <!-- 한식 -->
+      {% elif rows[i][3] == '한식' %}
       <div class="menu-item korean">
-        <img src="img/bibimbap.jpg">
-        <p class="menu-item-name">비빔밥</p>
-        <p class="menu-item-price">9,000원</p>
-        <button class="menu-item-btn" onclick="addToCart('비빔밥', 9000)">선택</button>
-      </div>
-      <div class="menu-item korean">
-        <img src="img/kimchi-stew.jpg">
-        <p class="menu-item-name">김치찌개</p>
-        <p class="menu-item-price">10,000원</p>
-        <button class="menu-item-btn" onclick="addToCart('김치찌개', 10000)">선택</button>
+        <img src="{{ rows[i][5] }}" width="300">
+        <p class="menu-item-name">{{ rows[i][1] }}</p>
+        <p class="menu-item-price">{{ rows[i][2] }}</p>
+        <button class="menu-item-btn" onclick="addToCart('{{ rows[i][1]|safe }}', '{{ rows[i][2]|safe }}')">선택</button>
       </div>
     </div>
-    
+      {% endif %}
+    {% endfor %}
     <!-- 선택한 메뉴 -->
     <div class="cart">
       <h3>선택한 메뉴</h3>
