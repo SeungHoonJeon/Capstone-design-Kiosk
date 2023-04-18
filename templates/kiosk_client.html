@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+
+</head>
+<body>
+  <header>
+    <div id="menu-container">
+      <button class="category-btn" data-category="western">양식</button>
+      <button class="category-btn" data-category="chinese">중식</button>
+      <button class="category-btn" data-category="korean">한식</button>
+    </div>
+  </header>
+  <main>
+    <div class="menu-items">
+    <!-- 양식 -->
+      <div class="menu-item western">
+        <img src="img/spaghetti.jpg">
+        <p class="menu-item-name">스파게티</p>
+        <p class="menu-item-price">10,000원</p>
+        <button class="menu-item-btn" onclick="addToCart('스파게티', 10000)">선택</button>
+      </div>
+      <div class="menu-item western">
+        <img src="img/pizza.jpg">
+        <p class="menu-item-name">피자</p>
+        <p class="menu-item-price">15,000원</p>
+        <button class="menu-item-btn" onclick="addToCart('피자', 15000)">선택</button>
+      </div>
+
+      <!-- 중식 -->
+      <div class="menu-item chinese">
+        <img src="img/jjajangmyeon.jpg">
+        <p class="menu-item-name">짜장면</p>
+        <p class="menu-item-price">8,000원</p>
+        <button class="menu-item-btn" onclick="addToCart('짜장면', 8000)">선택</button>
+      </div>
+      <div class="menu-item chinese">
+        <img src="img/jjamppong.jpg">
+        <p class="menu-item-name">짬뽕</p>
+        <p class="menu-item-price">12,000원</p>
+        <button class="menu-item-btn" onclick="addToCart('짬뽕', 12000)">선택</button>
+      </div>
+
+    <!-- 한식 -->
+      <div class="menu-item korean">
+        <img src="img/bibimbap.jpg">
+        <p class="menu-item-name">비빔밥</p>
+        <p class="menu-item-price">9,000원</p>
+        <button class="menu-item-btn" onclick="addToCart('비빔밥', 9000)">선택</button>
+      </div>
+      <div class="menu-item korean">
+        <img src="img/kimchi-stew.jpg">
+        <p class="menu-item-name">김치찌개</p>
+        <p class="menu-item-price">10,000원</p>
+        <button class="menu-item-btn" onclick="addToCart('김치찌개', 10000)">선택</button>
+      </div>
+    </div>
+    
+    <!-- 선택한 메뉴 -->
+    <div class="cart">
+      <h3>선택한 메뉴</h3>
+      <ul id="cart-items"></ul>
+      <div id="total-price">총가격: 0원
+        <div class=""></div>
+      </div>
+    </div>
+    <div>
+      <h3>요청 사항</h3>
+      <input type="text" id="request"></input>
+    </div>
+    <div>
+      <button type="buutton" onclick="placeOrder()">카드결제</button>
+    </div>
+  </main>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -6,6 +6,7 @@ app = Flask(__name__)
 #세션 저장
 app.secret_key = "session_cookie"
 
+#데이터베이스 초기 설정
 def inital_DB():
     conn = sqlite3.connect('user_test1.db',check_same_thread=False,isolation_level=None)
     c = conn.cursor()
@@ -24,70 +25,39 @@ def inital_DB():
     '''
     return c
 
+#음식 주문 api
 def order_food():
     cursor.execute(f"SELECT * FROM table2")
     rows = cursor.fetchall()
+    count = len(rows)
+    if count < 8:
+        empty = 8 - count
+        for i in range(empty):
+            rows.append(('','','',0,''))
     return rows
 
+def menu():
+    cursor.execute("SELECT * FROM table1")
+    rows = cursor.fetchall()
+    return rows
+
+#주문 음식 api
 @app.route("/api/order_food")
 def api_order_food():
     rows = order_food()
-    return f"{rows}"
+    return rows
 
-@app.route("/")
-def hello(username=None, rows=None):
-    if 'id' in session:
-        username = session['id']
-        rows = order_food()
-        return render_template("./counter_main.html", username=username, rows = rows)
-    else:
-        return render_template("./index.html")
-
-@app.route("/manage", methods=['POST','GET'])
-def manage(rows=None, item=None):
-    if request.method == "GET":
-        cursor.execute("SELECT * FROM table1")
-        rows = cursor.fetchall()
-        cursor.execute("SELECT * FROM table2")
-        items = cursor.fetchall()
-        sum = 0
-        for item in items:    
-            print(item)
-            sum += item[3]
-        return render_template("./manage.html", rows=rows, sum=sum)
-    if request.method == "POST":
-        operation = request.form['operation']
-        food_name = request.form['food_name']
-        food_img = request.files['food_img']
-        food_img.save(f"/tmp/{food_img.filename}")
-        price = request.form['price']
-        category = request.form['category']
-        
-        print(operation) 
-        print(food_name)
-        print(food_img)
-        print(price)
-        print(category)
-
-        if operation == '1':
-            cursor.execute(f"insert into table1(menu, price, category, img_path, real_img_path, date) values('{food_name}',{price},'{category}','{food_img.filename}','/tmp/upload/{food_img.filename}','23-04-04')")
-            return "<script>location.href='./manage';</script>"
-        elif operation == '2':
-            #수정
-            pass
-            #cursor.execute(f"update table1 set menu={}, price={}, category={}, img_path={}, real_img_path={}, date={} where food_name={} where id={}")
-        else:
-            #삭제
-            pass
-@app.route("/login")
-def login():
-    return render_template("./login.html")
-
+#원격 관리 페이지
 @app.route("/remote")
 def remote():
     return render_template("./remote.html")
 
+#로그인
+@app.route("/login")
+def login():
+    return render_template("./login.html")
 
+#로그인 api
 @app.route("/api/login", methods=['POST'])
 def api_login():
     if request.method == "POST":
@@ -107,7 +77,56 @@ def api_login():
         
     else:
         return render_template("./login.html")
-   
+
+def delete_menu(idx):
+    sql = f"delete from table1 where id={idx}"
+    cursor.execute(sql)
+    return cursor.rowcount
+
+#처음 페이지
+@app.route("/", methods=['GET','POST'])
+def hello(username=None, rows=None):
+    if 'id' in session:
+        if request.method == "GET":
+            if request.args.get('id'): #삭제
+                idx = request.args.get('id')
+                delete_result = delete_menu(idx)
+                if delete_result == 1:
+                    print("메뉴를 정상적으로 삭제했습니다.")
+                    return "<script>alert('메뉴를 정상적으로 삭제했습니다.');location.href='./';</script>"
+                else:
+                    print("비정상적인 요청으로 삭제하지 못했습니다.")
+                    return "<script>alert('메뉴를 정상적으로 삭제했습니다.');location.href='./';</script>"
+            else:
+                username = session['id']
+                rows = order_food() #주문 메뉴 조회
+                total_price = sum([rows[i][3] for i in range(len(rows))])
+                rows1 = menu() #등록 메뉴 조회
+                print(rows)
+                print(rows1)
+                return render_template("./counter_main.html", username=username, rows = rows, rows1=rows1, total_price=total_price)
+        if request.method == "POST":
+            action = request.form['action']
+            food_name = request.form['food_name']
+            food_img = request.files['food_img']
+            food_img.save(f"/tmp/{food_img.filename}")
+            price = request.form['price']
+            category = request.form['category']
+            if action == "modifiy":
+                pass
+                #cursor.execute(f"update table1 set menu={}, price={}, category={}, img_path={}, real_img_path={}, date={} where food_name={} where id={}")
+                #return "<script>location.href='./manage';</script>"
+            elif action == "add":
+                print(action) 
+                print(food_name)
+                print(food_img)
+                print(price)
+                print(category)
+                cursor.execute(f"insert into table1(menu, price, category, img_path, real_img_path, date) values('{food_name}',{price},'{category}','{food_img.filename}','/tmp/upload/{food_img.filename}','23-04-04')")
+                return "<script>alert('메뉴 추가완료');location.href='./';</script>"
+    else:
+        return "<script>alert('로그인 후 이용해주세요.');location.href='./login'</script>"
+
 if __name__ == "__main__":
     cursor = inital_DB()
-    app.run(host='192.168.66.128',port=5050,debug=True)
+    app.run(host='192.168.0.42',port=5050,debug=True)

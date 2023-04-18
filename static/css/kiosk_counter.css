@@ -1,0 +1,58 @@
+.boardred-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid black;
+    padding: 20px;
+  }
+
+.box {
+  width: 800px;
+  height: 1300px;
+  margin: auto;
+}    
+.table_box {
+    width: 150px;
+    height: 150px;
+    float: left;
+    margin: 10px;
+    border: 2px solid black;
+}
+.small_box {
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+}
+.file {
+    width: 200px;
+    height: 200px;
+}
+.cctv_box {
+    width: 400px;
+    height: 200px;
+    border: 2px solid black;
+    float: left;
+}
+.price_box {
+    width: 800px;
+    height: 150px;
+    border: 2px solid black;
+    float: left;
+}
+.modal_box {
+    width: 450px;
+    height: 400;
+    border: 2px solid black;
+    margin-bottom: 10px;
+}
+
+.send_box {
+    width: 450px;
+    height: 400;
+    border: 2px solid black;
+}
+.text_box {
+    width: 450px;
+    height: 200px;
+    border: 2px solid black;
+}
