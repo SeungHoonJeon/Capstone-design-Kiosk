@@ -3,63 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-
+  <link href="{{ url_for('static', filename='css/kiosk_client.css') }}" rel="stylesheet">
 </head>
 <body>
   <header>
     <div id="menu-container">
-      <button class="category-btn" data-category="western">양식</button>
-      <button class="category-btn" data-category="chinese">중식</button>
-      <button class="category-btn" data-category="korean">한식</button>
+      <button class="category-btn" data-category="양식">양식</button>
+      <button class="category-btn" data-category="중식">중식</button>
+      <button class="category-btn" data-category="한식">한식</button>
     </div>
   </header>
-  <main>
+  <main class="main">
     <div class="menu-items">
     <!-- 양식 -->
     {% for i in range(rows | length) %}
-      {% if rows[i][3] == '양식' %}
-      <div class="menu-item western">
-        <img src="{{ rows[i][5] }}" width="300">
+      <div class="menu-item {{ rows[i][3] }}">
+        <img src="{{ rows[i][5] }}" width="300" height="200">
         <p class="menu-item-name">{{ rows[i][1] }}</p>
         <p class="menu-item-price">{{ rows[i][2] }}</p>
         <button class="menu-item-btn" onclick="addToCart('{{ rows[i][1]|safe }}', '{{ rows[i][2]|safe }}')">선택</button>
       </div>
-      
-      <!-- 중식 -->
-      {% elif rows[i][3] == '중식' %}
-      <div class="menu-item chinese">
-        <img src="{{ rows[i][5] }}" width="300">
-        <p class="menu-item-name">{{ rows[i][1] }}</p>
-        <p class="menu-item-price">{{ rows[i][2] }}</p>
-        <button class="menu-item-btn" onclick="addToCart('{{ rows[i][1]|safe }}', '{{ rows[i][2]|safe }}')">선택</button>
-      </div>
-
-    <!-- 한식 -->
-      {% elif rows[i][3] == '한식' %}
-      <div class="menu-item korean">
-        <img src="{{ rows[i][5] }}" width="300">
-        <p class="menu-item-name">{{ rows[i][1] }}</p>
-        <p class="menu-item-price">{{ rows[i][2] }}</p>
-        <button class="menu-item-btn" onclick="addToCart('{{ rows[i][1]|safe }}', '{{ rows[i][2]|safe }}')">선택</button>
-      </div>
-    </div>
-      {% endif %}
     {% endfor %}
+    </div>
     <!-- 선택한 메뉴 -->
-    <div class="cart">
-      <h3>선택한 메뉴</h3>
-      <ul id="cart-items"></ul>
-      <div id="total-price">총가격: 0원
-        <div class=""></div>
+    <aside class="side">
+      <div class="cart">
+        <h3>선택한 메뉴</h3>
+        <ul id="cart-items"></ul>
+        <div id="total-price">총가격: 0원
+          <div class=""></div>
+        </div>
       </div>
-    </div>
-    <div>
-      <h3>요청 사항</h3>
-      <input type="text" id="request"></input>
-    </div>
-    <div>
-      <button type="buutton" onclick="placeOrder()">카드결제</button>
-    </div>
+      <div class="Request">
+        <h3>요청 사항</h3>
+        <input type="text" id="request">
+      </div>
+      <div id="popup" style="display: none;">
+          <div>주문 음식</div>
+          <div id="result_order"></div>
+          <div>총 금액</div>
+          <div id="result_price"></div>
+          <div>요청 사항</div>
+          <div id="result_request"></div>  
+          <button id="close-btn" onclick="payPopup()">결제</button>
+          <button id="close-btn" onclick="closePopup()">취소</button>
+      </div>  
+      <div>
+        <button type="buutton" id="credit" onclick="placeOrder()">주문하기</button>
+      </div>
+    </aside>
   </main>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

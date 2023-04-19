@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
-import sqlite3, os
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, render_template_string
+import sqlite3, os, json
 from datetime import datetime
 
 app = Flask(__name__)
@@ -94,6 +94,59 @@ def kiosk():
     rows = menu() #음식 조회
     print(rows)
     return render_template("./kiosk_client.html", rows=rows)
+
+@app.route("/kiosk/order", methods=['POST'])
+def order():
+    data = request.get_json()
+    print(data)
+    s = []
+    for item in data:
+        if 'name' in item and 'quantity' in item:
+            s.append(item['name'])
+            s.append(item['quantity'])
+        if 'inputrequest' in item and 'totalPrice' in item:
+            s.append(item['totalPrice'])
+            s.append(item['inputrequest'])
+    print(s)
+    food_total_string = ' '.join([f'{s[i]}x{s[i+1]}' for i in range(0, len(s[0:-2]), 2)])
+    totalPrice = s[len(s)-2]
+    inputrequest = s[len(s)-1]
+    data_to_dict = {
+        "food_total_string" : food_total_string,
+        "totalPrice" : totalPrice,
+        "inputrequest" : inputrequest
+    }     
+    return jsonify(data_to_dict)
+
+def complte_order(data):
+    now = datetime.now()
+    print(data)
+    for i in data:
+        order_food = i['food_total_string']
+        order_request = i['inputrequest']
+        order_totalprice = i['totalPrice']
+    ip_address = request.remote_addr
+    try:
+        cursor.execute(f"insert into table2(order_food, inquery, total, order_pc, date) values('{order_food}','{order_request}','{order_totalprice}','{ip_address}','{now.strftime('%Y-%m-%d %H:%M:%S')}')")
+        return 1
+    except Exception as e:
+        print("에러 발생:", e)
+        return 0
+
+
+@app.route("/kiosk/payment", methods=['POST'])
+def payment():
+    data = request.get_json()
+    result = complte_order(data)
+    #html = """
+    #    {{ 7*7 }}
+    #"""
+    if result == 1:
+        #return render_template_string(html)
+        return "주문완료"
+    else:
+        return "주문실패"
+
 
 #처음 페이지
 @app.route("/", methods=['GET','POST'])

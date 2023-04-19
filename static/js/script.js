@@ -14,6 +14,7 @@ categoryBtns.forEach(btn => {
   });
 });
 const cartItems = [];
+const payItems = [];
 
 //1. 이벤트 발생시 실행
 function addToCart(name, price) {
@@ -24,7 +25,8 @@ function addToCart(name, price) {
   } else {
 
     //아이템 추가
-    cartItems.push({ name, price, quantity: 1 });
+    cartItems.push({ name:name, price:price, quantity: 1 });
+    console.log(cartItems)
     const cart = document.getElementById('cart-items'); // <!--선택메뉴--> dom 객체 생성.
     const li = document.createElement('li'); // li태그에 추가.
     li.innerHTML = `${name} - ${price}원 x <span>${1}</span>개
@@ -81,4 +83,62 @@ function showKiosk(category) {
   kiosk.style.display = 'block';
   const categoryHeading = document.getElementById('category');
   categoryHeading.textContent = `${category} 메뉴`;
+}
+
+function placeOrder(){
+  // 팝업창을 띄우는 코드
+  var popup = document.getElementById("popup");
+  popup.style.display = "block"
+  var inputRequest = document.getElementById("request").value;
+  var totalPrice = document.getElementById("total-price").textContent.slice(6,11);
+  
+  cartItems.push({inputrequest:inputRequest, totalPrice:totalPrice})
+  
+  fetch('./kiosk/order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(cartItems)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    payItems.push(data)
+    let result_order = document.getElementById("result_order")
+    result_order.innerHTML = data['food_total_string']
+    
+    let result_price = document.getElementById("result_price")
+    result_price.innerHTML = data['totalPrice']
+
+    let result_request = document.getElementById("result_request")
+    result_request.innerHTML = data['inputrequest']
+   
+  })
+  .catch(error => {
+    console.error(error)
+  });
+}
+
+function closePopup() {
+  var popup = document.getElementById("popup");
+  popup.style.display = "none";
+  window.location.reload();
+}
+
+function payPopup(){
+  fetch('./kiosk/payment', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payItems)
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert(data)
+  })
+  .catch(error => {
+    console.error(error)
+  });
 }
