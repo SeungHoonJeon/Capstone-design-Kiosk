@@ -119,20 +119,29 @@
                                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form>
-                                                                <div class="small_box"></div>
-                                                                <input type="file">
-
+                                                            <form action="./" method="POST" enctype="multipart/form-data">
+                                                                <div class="small_box"><img src="{{ rows1[i][5] }}" width="100%" height="100%"></div>
+                                                                <input type="hidden" name="action" value="modify">
+                                                                <input type="hidden" name="id" value="{{ rows1[i][0] }}">
+                                                                <input type="file" name="food_img">
                                                                 <div class="mb-3">
                                                                   <label for="exampleInputEmail1" class="form-label">음식 이름</label>
-                                                                  <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                                                  <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="food_name" value="{{ rows1[i][1] }}">
                                                                   <div id="emailHelp" class="form-text"></div>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                   <label for="exampleInputPassword1" class="form-label">가격</label>
-                                                                  <input type="price" class="form-control" id="exampleInputPassword1">
+                                                                  <input type="price" class="form-control" id="exampleInputPassword1" name="price" value="{{ rows1[i][2] }}">
                                                                 </div>
-                                                                <button type="submit" class="btn btn-primary">확인</button>
+                                                                <div>
+                                                                  <select name="category">
+                                                                    <option value="none">=== 선택 ===</option>
+                                                                    <option value="양식">양식</option>
+                                                                    <option value="중식">중식</option>
+                                                                    <option value="한식">한식</option>
+                                                                  </select>
+                                                                </div><br>
+                                                                <button type="submit" class="btn btn-primary">수정</button>
                                                               </form>
                                                         </div>
                                                         <div class="modal-footer">
@@ -148,7 +157,7 @@
                                 </table>
 
                                 <!-- 메뉴 추가 form -->
-                                <form action="" method="POST" enctype="multipart/form-data">
+                                <form action="./" method="POST" enctype="multipart/form-data">
                                     <h5> 메뉴 추가 </h5>
                                     <div class="small_box"></div>
                                     <input type="hidden" name="action" value="add">

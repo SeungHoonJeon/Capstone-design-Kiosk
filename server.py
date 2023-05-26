@@ -175,13 +175,20 @@ def hello(username=None, rows=None):
             action = request.form['action']
             food_name = request.form['food_name']
             food_img = request.files['food_img']
-            food_img.save(f"./static/food/{food_img.filename}")
+            if food_img.filename == '':
+                print(food_img.filename)
+            else:
+                print('1',food_img.filename)
+                food_img.save(f"./static/food/{food_img.filename}")
             price = request.form['price']
             category = request.form['category']
-            if action == "modifiy":
+            if action == "modify":
                 id = request.form['id']
-                cursor.execute(f"update table1 set menu='{food_name}', price='{price}', category='{category}', img_path='{food_img}', real_img_path='./static/food/{food_img}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
-                return "<script>location.href='./manage';</script>"
+                if food_img.filename == '':
+                    cursor.execute(f"update table1 set menu='{food_name}', price='{price}', category='{category}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
+                else:    
+                    cursor.execute(f"update table1 set menu='{food_name}', price='{price}', category='{category}', img_path='{food_img.filename}', real_img_path='./static/food/{food_img.filename}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
+                return "<script>location.href='./';</script>"
             elif action == "add":
                 print(action) 
                 print(food_name)
