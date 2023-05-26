@@ -128,7 +128,12 @@ def complte_order(data):
     ip_address = request.remote_addr
     try:
         cursor.execute(f"insert into table2(order_food, inquery, total, order_pc, date) values('{order_food}','{order_request}','{order_totalprice}','{ip_address}','{now.strftime('%Y-%m-%d %H:%M:%S')}')")
-        return 1
+        html = f"""
+            { order_food }
+            { order_totalprice }
+            { order_request }
+        """
+        return html
     except Exception as e:
         print("에러 발생:", e)
         return 0
@@ -137,15 +142,22 @@ def complte_order(data):
 @app.route("/kiosk/payment", methods=['POST'])
 def payment():
     data = request.get_json()
+
+    ### 카드 결제 ###
+
+
+
+    #################
     result = complte_order(data)
-    #html = """
-    #    {{ 7*7 }}
-    #"""
-    if result == 1:
-        #return render_template_string(html)
-        return "주문완료"
-    else:
+
+    if result == -1:
         return "주문실패"
+    else:
+        ### 영수증 출력 ###
+
+
+        ##################
+        return render_template_string(result)
 
 
 #처음 페이지
@@ -185,9 +197,9 @@ def hello(username=None, rows=None):
             if action == "modify":
                 id = request.form['id']
                 if food_img.filename == '':
-                    cursor.execute(f"update table1 set menu='{food_name}', price='{price}', category='{category}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
+                    cursor.execute(f"update table1 set menu='{food_name}', price={price}, category='{category}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
                 else:    
-                    cursor.execute(f"update table1 set menu='{food_name}', price='{price}', category='{category}', img_path='{food_img.filename}', real_img_path='./static/food/{food_img.filename}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
+                    cursor.execute(f"update table1 set menu='{food_name}', price={price}, category='{category}', img_path='{food_img.filename}', real_img_path='./static/food/{food_img.filename}', date='{now.strftime('%Y-%m-%d %H:%M:%S')}' where id={id}")
                 return "<script>location.href='./';</script>"
             elif action == "add":
                 print(action) 
