@@ -107,11 +107,11 @@
                                             <td>{{ rows1[i][2] }}</td>
                                             <td> <button type="button" class="btn btn-dark">품절</button> </td>
                                             <td> <!-- 수정 버튼 모달창 -->
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop5">수정</button>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ i }}">수정</button>
                                                 <button type="button" class="btn btn-dark" onclick="location.href='./?id={{ rows1[i][0] }}'">삭제</button>
                                                   
                                                   <!-- Modal -->
-                                                <div class="modal fade" id="staticBackdrop5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal fade" id="modal{{ i }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                       <div class="modal-content">
                                                         <div class="modal-header">
@@ -141,10 +141,9 @@
                                                       </div>
                                                     </div>
                                                 </div>
-            
                                             </td>
                                         </tr>
-                                        {% endfor %}
+                                      {% endfor %}
                                     </tbody>
                                 </table>
 

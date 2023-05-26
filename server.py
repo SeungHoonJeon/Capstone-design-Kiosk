@@ -195,4 +195,4 @@ def hello(username=None, rows=None):
 
 if __name__ == "__main__":
     cursor = inital_DB()
-    app.run(host='192.168.0.42',port=5050,debug=True)
+    app.run(host='192.168.66.128',port=5050,debug=True)
