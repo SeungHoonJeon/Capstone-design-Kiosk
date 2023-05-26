@@ -45,7 +45,7 @@
                                         <br>빈 좌석
                                       {% else %}
                                         <br>{{ rows[i][1]}}
-                                        <br> {{ rows[i][3] }}
+                                        <br> {{ rows[i][3] }}원
                                         <br> {{ rows[i][2] }}
                                       {% endif %}
                                       <!-- Modal -->
@@ -59,7 +59,7 @@
                                             <div class="modal-body">
                                                 <div class="modal_box">
                                                     <p>{{ rows[i][1] }}</p>
-                                                    <p>총 금액 : {{ rows[i][3] }}</p>
+                                                    <p>총 금액 : {{ rows[i][3] }} 원</p>
                                                 </div>
 
                                                 <div class="send_box">
@@ -104,7 +104,7 @@
                                         <tr> <!-- 1번 메뉴 -->
                                             <th scope="row">{{ i+1 }}</th>
                                             <td>{{ rows1[i][1] }}</td>
-                                            <td>{{ rows1[i][2] }}</td>
+                                            <td>{{ rows1[i][2] }}원</td>
                                             <td> <button type="button" class="btn btn-dark">품절</button> </td>
                                             <td> <!-- 수정 버튼 모달창 -->
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ i }}">수정</button>
@@ -181,7 +181,7 @@
                                 
                                 <h5> 매출 관리 </h5>
                                 <div class="price_box">
-                                    총 매출 : {{ total_price }}
+                                    총 매출 : {{ total_price }}원
                                 </div>            
                             </div>
                         </div>                    

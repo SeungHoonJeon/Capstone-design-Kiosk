@@ -125,9 +125,11 @@ def complte_order(data):
         order_food = i['food_total_string']
         order_request = i['inputrequest']
         order_totalprice = i['totalPrice']
-    ip_address = request.remote_addr
+        ip_address = request.remote_addr
+
+        print(order_totalprice, type(order_totalprice))
     try:
-        cursor.execute(f"insert into table2(order_food, inquery, total, order_pc, date) values('{order_food}','{order_request}','{order_totalprice}','{ip_address}','{now.strftime('%Y-%m-%d %H:%M:%S')}')")
+        cursor.execute(f"insert into table2(order_food, inquery, total, order_pc, date) values('{order_food}','{order_request}',{int(order_totalprice[:-1])},'{ip_address}','{now.strftime('%Y-%m-%d %H:%M:%S')}')")
         html = f"""
             { order_food }
             { order_totalprice }
